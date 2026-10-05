@@ -482,7 +482,7 @@ footer .stripe{height:10px;max-width:220px;margin:0 auto 10px;border-radius:999p
   </div>
   <p class="demo" id="demoNote"></p>
 
-  <footer><div class="stripe"></div>KCIS Linkou · Grade 2 Family Fun Day</footer>
+  <footer><div class="stripe"></div>KCIS Linkou · Grade 2 Family Fun Day<br><small style="opacity:.6">版本 1006c</small></footer>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -851,8 +851,8 @@ $("#flags").addEventListener("click",e=>{const b=e.target.closest(".pen");if(!b)
 $("#copyBtn").addEventListener("click",async()=>{const acct=C.CLASSES[S.cls].account.replace(/[^\d]/g,"");
   try{await navigator.clipboard.writeText(acct);toast("已複製帳號 ✅")}catch{const r=document.createRange();r.selectNodeContents($("#tkAcct"));const s=getSelection();s.removeAllRanges();s.addRange(r);toast("請長按複製帳號")}});
 /* attend */
-document.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{S.attend=b.dataset.v;
-  document.querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-pressed",x===b));clearErr("f-attend");render()}));
+document.querySelectorAll("#f-attend .opt").forEach(b=>b.addEventListener("click",()=>{S.attend=b.dataset.v;
+  document.querySelectorAll("#f-attend .opt").forEach(x=>x.setAttribute("aria-pressed",x===b));clearErr("f-attend");render()}));
 /* family relay */
 function famRender(){const F=S.fam;document.querySelectorAll("#famsel .chip").forEach(c=>c.setAttribute("aria-pressed",!!F[c.dataset.f]));$("#sibN").textContent=F.sib}
 $("#events").addEventListener("click",e=>{const b=e.target.closest("#famsel button");if(!b)return;const F=S.fam,k=b.dataset.f;
@@ -929,19 +929,29 @@ function buildReview(el,d=data()){const r=rows(d);el.innerHTML=r.map(()=>`<div><
 
 $("#backBtn").addEventListener("click",()=>{if(cur>0){cur--;render();$("#wiz").scrollIntoView({behavior:"smooth",block:"start"})}});
 
-/* 送出到 Google Sheet：一般方式失敗時（常見於手機 LINE／Facebook 內建瀏覽器、Safari 擋跨網域轉址），
-   自動改用 no-cors 再送一次。後台以「班級＋座號」覆蓋同一筆，重送不會重複。 */
+/* 送出到 Google Sheet
+   1) 先用 fetch 送出並讀回結果；
+   2) 失敗時（手機 LINE／FB 內建瀏覽器、Safari 等常擋跨網域）改用「隱藏表單 + iframe」送出，所有瀏覽器都支援。
+   後台以「班級＋座號」覆蓋同一筆，重送不會重複。 */
+const withTimeout=(p,ms)=>Promise.race([p,new Promise((_,j)=>setTimeout(()=>j(new Error("timeout")),ms))]);
+function formPost(body){return new Promise(res=>{
+  const name="sink"+Date.now(), ifr=document.createElement("iframe"); ifr.name=name; ifr.style.display="none"; document.body.append(ifr);
+  const f=document.createElement("form"); f.method="POST"; f.action=C.SCRIPT_URL; f.target=name; f.acceptCharset="UTF-8"; f.style.display="none";
+  const i=document.createElement("input"); i.type="hidden"; i.name="payload"; i.value=body; f.append(i); document.body.append(f);
+  let done=false; const fin=()=>{if(done)return;done=true;setTimeout(()=>{f.remove();ifr.remove()},1000);res()};
+  ifr.addEventListener("load",fin); setTimeout(fin,8000); f.submit();
+})}
 async function sendToSheet(d){
-  const body=JSON.stringify(d), withTimeout=(p,ms)=>Promise.race([p,new Promise((_,j)=>setTimeout(()=>j(new Error("timeout")),ms))]);
+  const body=JSON.stringify(d);
   try{
-    const r=await withTimeout(fetch(C.SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body,redirect:"follow"}),20000);
-    const t=await r.text(); let j; try{j=JSON.parse(t)}catch{j=null}
+    const r=await withTimeout(fetch(C.SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body,redirect:"follow"}),30000);
+    const t=await r.text(); let j=null; try{j=JSON.parse(t)}catch{}
     if(j){ if(!j.ok) throw Object.assign(new Error(j.error||"送出失敗"),{server:true}); return j; }
     throw new Error("bad response");
   }catch(e){
-    if(e.server) throw e;                       // 後台明確回覆錯誤（例如座號錯誤），不重送
-    await withTimeout(fetch(C.SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body}),20000);
-    return {ok:true,updated:false,blind:true};  // no-cors 無法讀回結果，但資料已送達後台
+    if(e.server) throw e;
+    await formPost(body);
+    return {ok:true,updated:false,blind:true};
   }
 }
 $("#form").addEventListener("submit",async e=>{e.preventDefault();
