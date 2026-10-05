@@ -314,6 +314,7 @@ details.chart summary{cursor:pointer;font-weight:700;font-size:14px}
 .done .podium{width:min(360px,92%);margin:0 auto;display:block}
 .done h2{font-size:30px;font-weight:900;margin:6px 0 0;justify-content:center}
 .done p{color:var(--muted);font-weight:500;margin:4px 0 16px}
+.done .editnote{max-width:480px;margin:0 auto 14px;background:#FFF6DA;border-radius:12px;padding:8px 12px;font-size:13px;color:var(--ink);font-weight:500}
 .done .review{text-align:left;max-width:480px;margin:0 auto}
 canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140px);background:var(--navy);color:#fff;padding:10px 20px;border-radius:999px;font-weight:700;transition:transform .3s;z-index:60;white-space:nowrap}
@@ -476,13 +477,14 @@ footer .stripe{height:10px;max-width:220px;margin:0 auto 10px;border-radius:999p
       <div id="podium"></div>
       <h2>報名成功！🎉</h2>
       <p id="doneMsg"></p>
+      <p class="editnote">✏️ 如需修改報名內容，請重新填寫一次，相同班級與座號會以最新一次為準。</p>
       <div class="review" id="sum"></div>
       <button type="button" class="btn back" style="margin-top:20px" id="again">再幫另一位小朋友報名</button>
     </section>
   </div>
   <p class="demo" id="demoNote"></p>
 
-  <footer><div class="stripe"></div>KCIS Linkou · Grade 2 Family Fun Day<br><small style="opacity:.6">版本 1006f</small></footer>
+  <footer><div class="stripe"></div>KCIS Linkou · Grade 2 Family Fun Day<br><small style="opacity:.6">版本 1006g</small></footer>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -807,7 +809,8 @@ function scene_(id,vb){return `<svg viewBox="${vb}" preserveAspectRatio="xMidYMi
 $("#rules").innerHTML=[["📝",`報名截止 <b>${C.DEADLINE}</b>；每戶 NT$${C.FEE}（以一位學生為一戶）。`],
   ["💸",`退費截止 <b>${C.REFUND_DEADLINE}</b>；報名繳費後當日若無法前往，恕不退費。`],
   ["👕","學生請穿學校運動服，家長請穿白色上衣。"],["🍱","請自備餐點與水，垃圾請自行帶走。"],
-  ["🚗",`${C.PLACE}（${C.ADDRESS}）校內無停車位，請搭乘大眾運輸或共乘。`]]
+  ["🚗",`${C.PLACE}（${C.ADDRESS}）校內無停車位，請搭乘大眾運輸或共乘。`],
+  ["✏️","如需修改報名內容，請重新填寫一次，相同班級與座號會以最新一次為準。"]]
   .map(([i,t])=>`<li><i>${i}</i><span>${t}</span></li>`).join("");
 if(!C.SCRIPT_URL) $("#demoNote").textContent="⚠️ 示範模式：尚未設定 SCRIPT_URL，送出不會寫入 Google Sheet。";
 
