@@ -23,7 +23,7 @@ const CONFIG = {
   PLACE: "林口高中田徑場",
   ADDRESS: "新北市林口區仁愛路二段173號",
   FEE: 850,
-  DEADLINE: "2026/10/10（六）",       // 報名截止
+  DEADLINE: "2026/10/8（四）",        // 報名截止
   REFUND_DEADLINE: "2026/10/21（三）",// 退費截止（範例）
   // 加購 T 恤：PRICE 為每件價格
   TSHIRT: {
@@ -36,13 +36,14 @@ const CONFIG = {
     ]
   },
   CLASSES: {
-    "201": { bank: "範例銀行 (000)", account: "0000-0000-0201", holder: "201班班費帳戶（範例）" },
-    "202": { bank: "範例銀行 (000)", account: "0000-0000-0202", holder: "202班班費帳戶（範例）" },
-    "203": { bank: "範例銀行 (000)", account: "0000-0000-0203", holder: "203班班費帳戶（範例）" },
-    "204": { bank: "範例銀行 (000)", account: "0000-0000-0204", holder: "204班班費帳戶（範例）" },
-    "205": { bank: "範例銀行 (000)", account: "0000-0000-0205", holder: "205班班費帳戶（範例）" },
-    "206": { bank: "範例銀行 (000)", account: "0000-0000-0206", holder: "206班班費帳戶（範例）" },
-    "207": { bank: "範例銀行 (000)", account: "0000-0000-0207", holder: "207班班費帳戶（範例）" }
+    // bank：銀行代碼與名稱；account：帳號；linepay：使用 LINE Pay 請聯絡的總務媽媽（LINE 名稱）
+    "201": { bank: "(012) 台北富邦銀行", account: "05927534520000", linepay: "韓佳純" },
+    "202": { bank: "(822) 中國信託",     account: "901565320845",   linepay: "沛杰媽媽（Olivia 范）" },
+    "203": { bank: "(810) 星展銀行",     account: "60591922688",    linepay: "大洋媽媽（Flora Chen）" },
+    "204": { bank: "(822) 中國信託",     account: "015540147515",   linepay: "梓洋媽媽（Grace）" },
+    "205": { bank: "(822) 中國信託",     account: "510540397569",   linepay: "Yingmi" },
+    "206": { bank: "(824) 連線商業銀行 LINE Bank", account: "116000112131", linepay: "張貝貝（翊芯媽媽）" },
+    "207": { bank: "(822) 中國信託",     account: "336540246043",   linepay: "堉堯媽媽（Sanna Lin 宛姍）" }
   }
 };
 </script>
@@ -96,7 +97,12 @@ h1 .hl::after{content:"";position:absolute;left:-2%;right:-2%;bottom:.06em;heigh
 .info b{display:block;font-size:16px;line-height:1.3}
 @media(max-width:700px){.info{grid-template-columns:1fr 1fr}.info div:nth-child(2){border-right:0}.info div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
 .count{text-align:center;margin:18px 0 0;color:var(--muted);font-weight:700}
-.count b{font-family:"Fredoka";font-size:30px;color:var(--maroon);margin:0 4px}
+.count b{font-family:"Fredoka";font-size:22px;color:var(--navy);margin:0 4px}
+.deadline{margin:18px auto 0;max-width:440px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;background:var(--maroon);color:#fff;border-radius:18px;padding:10px 16px;box-shadow:0 5px 0 #7A1529, 0 14px 30px -12px rgba(163,32,58,.5)}
+.deadline .lb{font-weight:900;font-size:clamp(16px,4.2vw,19px);letter-spacing:.06em;display:flex;align-items:center;gap:8px}
+.deadline .dt{font-family:"Fredoka","Noto Sans TC",sans-serif;font-weight:700;font-size:clamp(26px,7vw,32px);line-height:1;color:var(--sun);white-space:nowrap}
+.deadline .dt small{font-family:"Noto Sans TC";font-size:.5em;color:#fff;font-weight:700;margin-left:4px}
+.deadline .left{flex-basis:100%;text-align:center;font-size:13px;font-weight:700;opacity:.92;margin-top:-4px}
 
 /* ===== WIZARD ===== */
 .wiz{margin-top:24px;background:var(--paper);border-radius:28px;box-shadow:var(--shadow);overflow:hidden}
@@ -161,6 +167,8 @@ input:focus,textarea:focus{border-color:var(--navy);background:#fff}
 .ticket .fee{text-align:center;border-left:2px dashed var(--line);padding-left:16px}
 .ticket .fee small{display:block;font-size:12px;color:var(--muted);font-weight:700}
 .ticket .fee b{font-family:"Fredoka";font-size:28px;color:var(--maroon)}
+.ticket .linepay{margin-top:12px;font-size:14px;font-weight:500;background:#EAF8EE;border-radius:12px;padding:8px 12px;color:var(--ink)}
+.ticket .linepay b{font-weight:900}
 .btn-copy{appearance:none;cursor:pointer;margin-top:10px;border:0;background:var(--navy);color:#fff;border-radius:999px;padding:7px 16px;font-weight:700;font-size:14px;white-space:nowrap}
 @media(max-width:520px){.ticket .top .fd{display:none}.ticket .body{grid-template-columns:1fr}.ticket .fee{border-left:0;border-top:2px dashed var(--line);padding:12px 0 0;display:flex;justify-content:space-between;align-items:center;text-align:left}}
 
@@ -170,6 +178,7 @@ input:focus,textarea:focus{border-color:var(--navy);background:#fff}
 .opt .e{font-size:24px}
 .opt:hover{border-color:var(--navy)}
 .opt.yes[aria-pressed=true]{background:var(--grass);border-color:var(--grass);color:#fff}
+.opt.pw[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
 .opt.no[aria-pressed=true]{background:var(--muted);border-color:var(--muted);color:#fff}
 
 /* stepper */
@@ -181,8 +190,20 @@ input:focus,textarea:focus{border-color:var(--navy);background:#fff}
 .cnt output{font-family:"Fredoka";font-weight:700;font-size:26px;min-width:30px;text-align:center}
 
 /* events */
-.events{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.events{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 @media(max-width:700px){.events{grid-template-columns:1fr}}
+.evhd{font-weight:900;font-size:16px;margin:0 0 10px;display:flex;align-items:baseline;gap:8px}
+.evhd small{font-size:12px;color:var(--muted);font-weight:500}
+.autos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media(max-width:760px){.autos{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:520px){.autos{gap:7px}.autos .ev .meta{padding:6px 7px 8px}.autos .ev h3{font-size:13px}.autos .ev .en2{display:none}.autos .ev .intro{font-size:11.5px}.autos .ev .all{display:none}}
+@media(max-width:340px){.autos{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.autos .ev{border-radius:14px;border-width:1.5px}
+.autos .ev .meta{padding:7px 9px 9px}
+.autos .ev h3{font-size:14px;line-height:1.3}
+.autos .ev .en2{font-size:11px}
+.autos .ev .intro{font-size:12px;line-height:1.5;margin-top:3px;color:var(--muted)}
+.autos .ev .all{font-size:10px;padding:2px 7px;right:6px;top:6px}
 .ev{position:relative;cursor:pointer;border:2px solid var(--line);border-radius:20px;background:#fff;overflow:hidden;transition:transform .15s, border-color .15s, box-shadow .15s}
 .ev:hover{transform:translateY(-3px)}
 .ev .art{background:linear-gradient(180deg,#DFF3FF 0 58%,#BFE8B4 58% 100%);aspect-ratio:16/10}
@@ -201,6 +222,18 @@ input:focus,textarea:focus{border-color:var(--navy);background:#fff}
 .ev.auto:hover{transform:none}
 .ev .all{position:absolute;right:10px;top:10px;z-index:2;background:var(--c);color:#fff;font-weight:900;font-size:13px;border-radius:999px;padding:3px 12px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
 .ev .intro{font-size:14px;line-height:1.7;color:var(--ink);margin-top:6px}
+.ev.fam{cursor:default;border-color:var(--c)}
+.ev.fam:hover{transform:none}
+.famsel{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);display:grid;gap:8px}
+.famsel .chip[aria-pressed=true]{background:var(--c);border-color:var(--c);color:#fff}
+.famsel .chip.none[aria-pressed=true]{background:var(--muted);border-color:var(--muted)}
+.famsel .sib{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px}
+.famsel .sib button{appearance:none;cursor:pointer;width:30px;height:30px;border-radius:50%;border:2px solid var(--line);background:#fff;color:var(--navy);font-weight:900;font-size:16px;line-height:1;padding:0}
+.famsel .sib button:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.famsel .sib output{font-family:"Fredoka";font-weight:700;font-size:20px;min-width:20px;text-align:center}
+.ev.fam.miss{box-shadow:0 0 0 3px var(--err) inset}
+.ev.fam.miss .famsel::before{content:"⚠️ 請選擇一個選項";display:block;color:var(--err);font-weight:900;font-size:13px}
+.famsel.err{outline:2px dashed var(--err);outline-offset:6px;border-radius:12px}
 .whos{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
 .ev.on .whos{display:block}
 .whos .t{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px}
@@ -306,6 +339,7 @@ footer .stripe{height:10px;max-width:220px;margin:0 auto 10px;border-radius:999p
 
 <div class="wrap">
   <section class="info" id="info"></section>
+  <div class="deadline" id="deadline" role="note"></div>
   <p class="count" id="count"></p>
 
   <div class="wiz" id="wiz">
@@ -326,7 +360,8 @@ footer .stripe{height:10px;max-width:220px;margin:0 auto 10px;border-radius:999p
         <div class="ticket" id="ticket" aria-live="polite">
           <div class="top"><span><span id="tkCls"></span> 班專屬匯款帳號</span><span class="fd">BANK TRANSFER</span></div>
           <div class="body">
-            <div><div class="acct" id="tkAcct"></div><div class="meta" id="tkMeta"></div><button type="button" class="btn-copy" id="copyBtn">📋 複製帳號</button></div>
+            <div><div class="acct" id="tkAcct"></div><div class="meta" id="tkMeta"></div><button type="button" class="btn-copy" id="copyBtn">📋 複製帳號</button>
+              <div class="linepay">💚 <b>LINE Pay</b> 付款請聯繫本班總務：<b id="tkLine"></b></div></div>
             <div class="fee"><small>每戶費用</small><b id="tkFee"></b></div>
           </div>
         </div>
@@ -376,11 +411,14 @@ footer .stripe{height:10px;max-width:220px;margin:0 auto 10px;border-radius:999p
 
       <!-- 4 events -->
       <section class="pane" data-step="events">
-        <h2><span class="n">4</span>參加項目</h2>
-        <p class="sub">「仰臥傳圈接力賽」和「同心跳跳龍」是全體二年級同學都會參加的項目，不用另外報名；「大隊接力賽」請選擇要報名的組別。</p>
+        <h2><span class="n">4</span>比賽項目</h2>
+        <p class="sub">以下五個項目二年級同學全員參加；下方兩項是家人的<b>參賽意願調查</b>，請填寫。</p>
+        <div class="evhd">🏅 G2 全員參加項目 <small>無須另外報名</small></div>
+        <div class="autos" id="autos"></div>
+        <div class="evhd" style="margin-top:22px">📝 家人參賽意願調查 <span class="req">* 必填</span> <small>兩項都要選擇，才能前往下一步</small></div>
         <div id="f-events">
           <div class="events" id="events"></div>
-          <div class="err-msg">大隊接力賽請至少選一個組別（或取消勾選大隊接力賽）</div>
+          <div class="err-msg">請完成最後兩項意願調查：「大隊接力賽 家屬組」與「爸爸拔河」（都可以選「不參加」）</div>
         </div>
       </section>
 
@@ -403,6 +441,12 @@ footer .stripe{height:10px;max-width:220px;margin:0 auto 10px;border-radius:999p
         <h2><span class="n">6</span>匯款回報</h2>
         <p class="sub" id="paySub"></p>
         <div class="paybox" id="paybox"></div>
+        <label class="f">付款方式 <span class="req">*</span></label>
+        <div class="yn" id="payWay" role="group" aria-label="付款方式">
+          <button type="button" class="opt pw" data-v="銀行轉帳" aria-pressed="true"><span class="e">🏦</span>銀行轉帳</button>
+          <button type="button" class="opt pw" data-v="LINE Pay" aria-pressed="false"><span class="e">💚</span>LINE Pay</button>
+        </div>
+        <p class="sub" id="lpNote" style="display:none;margin:10px 0 0"></p>
         <div class="row">
           <div id="f-last5"><label class="f" for="last5">匯款帳號末五碼 <span class="req">*</span></label>
             <input type="text" id="last5" inputmode="numeric" maxlength="5" placeholder="12345"><div class="err-msg">請輸入 5 位數字</div></div>
@@ -613,6 +657,47 @@ SCENES.hula=()=>`
   <path d="M115 108 l6 11 7 -10" fill="none" stroke="#FF8A1F" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
   ${STAR(36,40,.8)}${STAR(296,36,.7)}`;
 
+/* 大隊接力賽 家屬組：爸爸把接力棒交給媽媽，哥哥在旁加油 */
+SCENES.famrelay=()=>`
+  <path d="M0 184 H320" stroke="#fff" stroke-width="3" opacity=".7"/><path d="M0 196 H320" stroke="#fff" stroke-width="3" opacity=".7"/>
+  <g stroke="${INK}" stroke-width="3.5" stroke-linecap="round" opacity=".5"><path d="M24 60 h24 M16 82 h22 M28 104 h18"/></g>
+  ${kid({x:105,y:58,s:1.08,adult:true,lean:12,hs:"short",hair:"#4A2A14",pants:"#3E5A8A",aB:[-55,-95],aF:[95,70],lB:[-45,-100],lF:[70,10],mouth:"open",extra:baton})}
+  ${kid({x:215,y:56,s:1.05,adult:true,lean:10,hs:"long",hair:"#6B3E1F",skin:"#F5C29A",pants:"#26324F",aB:[-80,-100],aF:[40,120],lB:[-40,-95],lF:[60,5],mouth:"smile"})}
+  ${STAR(292,34,.8)}${STAR(40,28,.7)}`;
+
+/* G2 拔河：兩隊小朋友拉繩 */
+const ROPE=(x1,y1,x2,y2)=>`<path d="M${x1} ${y1} L${x2} ${y2}" stroke="${INK}" stroke-width="7" stroke-linecap="round"/><path d="M${x1} ${y1} L${x2} ${y2}" stroke="#C99A5B" stroke-width="4" stroke-linecap="round" stroke-dasharray="5 3"/>`;
+SCENES.tug=()=>`
+  <path d="M160 70 V196" stroke="#fff" stroke-width="4" stroke-dasharray="8 6"/>
+  ${ROPE(10,104,310,104)}
+  <path d="M160 104 l-7 18 h14z" fill="#E5484D" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+  ${kid({x:62,y:86,s:1.05,lean:22,hs:"spiky",u:"navy",aB:[70,95],aF:[78,92],lB:[-35,-8],lF:[45,15],mouth:"open"})}
+  ${kid({x:112,y:86,s:1.05,lean:20,hs:"pony",u:"red",hair:"#6B3E1F",aB:[72,95],aF:[80,92],lB:[-35,-8],lF:[45,15],mouth:"open"})}
+  ${kid({x:210,y:86,s:1.05,lean:20,flip:true,hs:"long",u:"red",hair:"#5A3320",aB:[72,95],aF:[80,92],lB:[-35,-8],lF:[45,15],mouth:"open"})}
+  ${kid({x:260,y:86,s:1.05,lean:22,flip:true,hs:"short",u:"navy",hair:"#5E3418",aB:[70,95],aF:[78,92],lB:[-35,-8],lF:[45,15],mouth:"open"})}
+  ${STAR(160,34,.8)}`;
+
+/* 籃球運球折返跑 */
+const BALL=(x,y,r=11)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#F08A24" stroke="${INK}" stroke-width="2.4"/><path d="M${x-r} ${y} H${x+r} M${x} ${y-r} V${y+r} M${x-r*.7} ${y-r*.7} q${r*.5} ${r*.7} 0 ${r*1.4} M${x+r*.7} ${y-r*.7} q${-r*.5} ${r*.7} 0 ${r*1.4}" fill="none" stroke="${INK}" stroke-width="1.4"/>`;
+SCENES.dribble=()=>`
+  <path d="M40 182 C150 182 230 178 262 160 C292 140 262 120 232 140" fill="none" stroke="#F08A24" stroke-width="3" stroke-dasharray="7 6" stroke-linecap="round"/>
+  <path d="M238 132 l-9 10 12 3" fill="none" stroke="#F08A24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  ${CONE(262,180,.9)}
+  <g stroke="${INK}" stroke-width="3.5" stroke-linecap="round" opacity=".5"><path d="M30 70 h22 M22 92 h22"/></g>
+  ${kid({x:120,y:76,s:1.4,lean:10,hs:"spiky",u:"navy",aB:[-50,-90],aF:[40,10],lB:[-45,-100],lF:[70,10],mouth:"open"})}
+  ${BALL(170,166,12)}<path d="M165 140 v10 M172 136 v8" stroke="${INK}" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+  <g stroke="${INK}" stroke-width="2" stroke-linecap="round" opacity=".6"><path d="M158 182 l-6 5 M186 182 l6 5 M172 184 v7"/></g>
+  ${STAR(290,36,.8)}`;
+
+/* 爸爸拔河 */
+SCENES.dadtug=()=>`
+  ${ROPE(0,76,320,76)}
+  <path d="M250 76 l-7 18 h14z" fill="#E5484D" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+  ${kid({x:80,y:50,s:1.0,adult:true,lean:22,hs:"spiky",hair:"#4A2A14",pants:"#3E5A8A",aB:[72,92],aF:[80,90],lB:[-35,-8],lF:[45,15],mouth:"open"})}
+  ${kid({x:160,y:50,s:1.0,adult:true,lean:20,hs:"short",hair:"#2B1B12",skin:"#E8B08A",pants:"#26324F",aB:[72,92],aF:[80,90],lB:[-35,-8],lF:[45,15],mouth:"open"})}
+  <g stroke="${INK}" stroke-width="3" stroke-linecap="round" opacity=".5"><path d="M282 120 h24 M288 140 h20"/></g>
+  ${STAR(300,30,.8)}`;
+
 </script>
 <script>
 (() => {
@@ -679,24 +764,44 @@ $("#info").innerHTML=[["📅","#FFE9C2","日期",C.DATE],["⏰","#DDF0FF","時�
   .map(([i,bg,k,v])=>`<div><span class="ic" style="background:${bg}">${i}</span><span><small>${k}</small><b>${v}</b></span></div>`).join("");
 (()=>{const m=C.DATE.match(/(\d{4})\/(\d{1,2})\/(\d{1,2})/); if(!m) return;
   const d=Math.ceil((new Date(+m[1],m[2]-1,+m[3])-new Date().setHours(0,0,0,0))/864e5);
-  if(d>0) $("#count").innerHTML=`<span style="white-space:nowrap">距離運動會還有<b>${d}</b>天</span> · <span style="white-space:nowrap">報名截止 ${C.DEADLINE}</span>`;})();
+  if(d>0) $("#count").innerHTML=`<span style="white-space:nowrap">距離運動會還有<b>${d}</b>天</span>`;})();
+(()=>{const m=C.DEADLINE.match(/(\d{4})\/(\d{1,2})\/(\d{1,2})(.*)/); if(!m) return;
+  const left=Math.ceil((new Date(+m[1],m[2]-1,+m[3])-new Date().setHours(0,0,0,0))/864e5);
+  const tip=left>1?`⏳ 還剩 ${left} 天，請把握時間報名！`:left===1?"⏳ 明天就截止囉，請盡快報名！":left===0?"🔔 今天截止，請盡快完成報名！":"報名已截止，如有問題請聯絡班級總務。";
+  $("#deadline").innerHTML=`<span class="lb">📢 報名截止</span><span class="dt">${+m[2]}/${+m[3]}<small>${m[4].trim()}</small></span><span class="left">${tip}</span>`;})();
 
 /* ---------- class pennants ---------- */
 $("#flags").innerHTML=Object.keys(C.CLASSES).map(k=>`<button type="button" class="pen" data-c="${k}" style="--c:${CC[k]}" aria-pressed="false" aria-label="${k} 班"><span class="cloth">${k}<small>班</small></span></button>`).join("");
 
 /* ---------- events ---------- */
 const EVENTS=[
-  {id:"relay",name:"大隊接力賽",en:"Team Relay",desc:"分「G2 學生組」與「家長／兄弟姊妹組」，可以都報名！",color:"#C8324B",vb:"30 12 280 188",groups:true,def:"G2學生組"},
-  {id:"hula",name:"仰臥傳圈接力賽",en:"Hoop Pass Relay",desc:"全班分組坐成一排，每人前方放一個角錐。拿著呼拉圈向後仰躺、再用核心力量坐起來，把圈放到後方同學的角錐上，一個接一個傳到最後！考驗腹部力量、身體控制和團隊默契。",color:"#8E4EC6",vb:"0 20 330 175",auto:true},
-  {id:"dragon",name:"同心跳跳龍",en:"Dragon Hopper",desc:"小朋友們一起坐上充氣跳跳龍，抓好把手、跟著口令，大家同時往前蹦！要跳得快又不翻車，最需要的就是全隊同心協力，一起衝向終點。",color:"#2FA866",vb:"0 20 340 190",auto:true}];
+  {id:"relay",name:"大隊接力賽 G2 學生組",en:"Team Relay · Students",desc:"二年級同學全體上場！一棒接一棒在跑道上全力衝刺，把接力棒穩穩交給下一位隊友，每一棒都關係著全班的勝負，一起為班級爭取榮耀！",color:"#C8324B",vb:"30 12 280 188",auto:true,short:"全班一棒接一棒，全力衝刺為班級爭光！"},
+  {id:"hula",name:"仰臥傳圈接力賽",en:"Hoop Pass Relay",desc:"全班分組坐成一排，每人前方放一個角錐。拿著呼拉圈向後仰躺、再用核心力量坐起來，把圈放到後方同學的角錐上，一個接一個傳到最後！考驗腹部力量、身體控制和團隊默契。",color:"#8E4EC6",vb:"0 20 330 175",auto:true,short:"仰躺再坐起，把呼拉圈傳給後方同學！"},
+  {id:"dragon",name:"同心跳跳龍",en:"Dragon Hopper",desc:"小朋友們一起坐上充氣跳跳龍，抓好把手、跟著口令，大家同時往前蹦！要跳得快又不翻車，最需要的就是全隊同心協力，一起衝向終點。",color:"#2FA866",vb:"0 20 340 190",auto:true,short:"坐上跳跳龍，全隊同心一起往前蹦！"},
+  {id:"tug",name:"G2 拔河",en:"Tug of War",desc:"班級對抗拔河！大家握緊繩子、身體往後倒，跟著口令一起用力拉，把中間的紅旗拉過來就贏了！比的不只是力氣，更是全班的默契。",color:"#E5484D",vb:"0 20 320 185",auto:true,short:"握緊繩子往後拉，比力氣更比默契！"},
+  {id:"dribble",name:"籃球運球折返跑",en:"Dribble Shuttle Run",desc:"一邊運著籃球、一邊往前跑，繞過角錐再折返回來，把球交給下一位同學！要跑得快又不讓球跑掉，考驗手眼協調和控球技巧。",color:"#F08A24",vb:"0 10 320 190",auto:true,short:"運球繞過角錐再折返，考驗控球技巧！"},
+  {id:"famrelay",name:"大隊接力賽 家屬組",en:"Team Relay · Family",desc:"爸爸、媽媽和兄弟姊妹也來跑一棒！請勾選有意願參加的家人，兄弟姊妹請填人數；全家都不參加請選「不參加」。",color:"#0E9BD8",vb:"20 -4 300 190",fam:true},
+  {id:"dadtug",name:"爸爸拔河",en:"Dads' Tug of War",desc:"爸爸們的力量對決！請爸爸們一起上場拔河，為孩子的班級加油出力。請勾選爸爸是否有意願參加。",color:"#3A45C8",vb:"0 -10 320 190",yn:true}];
 const WHO=["學生本人","爸爸","媽媽","其他家人"];
 const FAM=["爸爸","媽媽","哥哥","姊姊","弟弟","妹妹","其他家人"];
-$("#events").innerHTML=EVENTS.map(e=>e.auto?`<div class="ev auto" data-e="${e.id}" style="--c:${e.color}">
+$("#autos").innerHTML=EVENTS.filter(e=>e.auto).map(e=>`<div class="ev auto" data-e="${e.id}" style="--c:${e.color}">
   <span class="all">全員參加</span><div class="art">${scene_(e.id,e.vb)}</div>
-  <div class="meta"><h3>${e.name}</h3><p class="en2">${e.en}</p><p class="ds intro">${e.desc}</p></div></div>`:`<div class="ev" data-e="${e.id}" style="--c:${e.color}" tabindex="0" role="checkbox" aria-checked="false" aria-label="${e.name}">
-  <span class="tick">✓</span><div class="art">${scene_(e.id,e.vb)}</div>
-  <div class="meta"><h3>${e.name}</h3><p class="en2">${e.en}</p><p class="ds">${e.desc}</p>
-  <div class="whos">${e.groups?`<div class="t">① G2 學生組</div><div class="chips"><button type="button" class="chip" data-w="G2學生組" aria-pressed="false">🏃 學生本人參加</button></div><div class="t" style="margin-top:10px">② 家長／兄弟姊妹組（選擇參賽身分，可複選）</div><div class="chips">${FAM.map(w=>`<button type="button" class="chip" data-w="${w}" aria-pressed="false">${w}</button>`).join("")}</div>`:`<div class="t">誰要上場？</div><div class="chips">${e.studentOnly?`<span class="chip" aria-pressed="true" style="background:var(--c);border-color:var(--c);color:#fff;cursor:default">學生本人</span><span style="font-size:12px;color:var(--muted);align-self:center">此項目限學生本人</span>`:WHO.map(w=>`<button type="button" class="chip" data-w="${w}" aria-pressed="false">${w}</button>`).join("")}</div>`}</div></div></div>`).join("");
+  <div class="meta"><h3>${e.name}</h3><p class="en2">${e.en}</p><p class="ds intro">${e.short||e.desc}</p></div></div>`).join("");
+$("#events").innerHTML=EVENTS.filter(e=>!e.auto).map(e=>e.auto?`<div class="ev auto" data-e="${e.id}" style="--c:${e.color}">
+  <span class="all">全員參加</span><div class="art">${scene_(e.id,e.vb)}</div>
+  <div class="meta"><h3>${e.name}</h3><p class="en2">${e.en}</p><p class="ds intro">${e.desc}</p></div></div>`
+ :e.yn?`<div class="ev fam" data-e="${e.id}" style="--c:${e.color}">
+  <span class="all" style="background:#FFC93C;color:#5A4200">參賽意願調查</span><div class="art">${scene_(e.id,e.vb)}</div>
+  <div class="meta"><h3>${e.name} <span class="req">*</span></h3><p class="en2">${e.en}</p><p class="ds intro">${e.desc}</p>
+  <div class="famsel" id="dadsel"><div class="chips"><button type="button" class="chip" data-y="參加" aria-pressed="false">💪 爸爸參加</button><button type="button" class="chip none" data-y="不參加" aria-pressed="false">🙅 不參加</button></div></div></div></div>`
+ :`<div class="ev fam" data-e="${e.id}" style="--c:${e.color}">
+  <span class="all" style="background:#FFC93C;color:#5A4200">參賽意願調查</span><div class="art">${scene_(e.id,e.vb)}</div>
+  <div class="meta"><h3>${e.name} <span class="req">*</span></h3><p class="en2">${e.en}</p><p class="ds intro">${e.desc}</p>
+  <div class="famsel" id="famsel">
+    <div class="chips"><button type="button" class="chip" data-f="dad" aria-pressed="false">👨 爸爸</button><button type="button" class="chip" data-f="mom" aria-pressed="false">👩 媽媽</button></div>
+    <div class="sib"><span>👧👦 兄弟姊妹</span><button type="button" data-f="sib" data-d="-1" aria-label="減少">−</button><output id="sibN">0</output><button type="button" data-f="sib" data-d="1" aria-label="增加">+</button><span>人</span></div>
+    <div class="chips"><button type="button" class="chip none" data-f="none" aria-pressed="false">🙅 不參加</button></div>
+  </div></div></div>`).join("");
 function scene_(id,vb){return `<svg viewBox="${vb}" preserveAspectRatio="xMidYMid meet"><g class="fig">${SCENES[id]()}</g></svg>`}
 
 $("#rules").innerHTML=[["📝",`報名截止 <b>${C.DEADLINE}</b>；每戶 NT$${C.FEE}（以一位學生為一戶）。`],
@@ -708,8 +813,8 @@ if(!C.SCRIPT_URL) $("#demoNote").textContent="⚠️ 示範模式：尚未設定
 
 /* ---------- state ---------- */
 const S={cls:null,attend:null,adults:2,kids:1,events:{}};
-const AUTO=["hula","dragon"];
-const STEPS=[["class","選擇班級"],["student","學生資料"],["family","家長與人數"],["events","參加項目"],["tshirt","加購T恤"],["payment","匯款回報"],["confirm","確認送出"]];
+const AUTO=["relay","hula","dragon","tug","dribble"];S.pay="銀行轉帳";S.fam={dad:false,mom:false,sib:0,none:false};S.dadtug="";
+const STEPS=[["class","選擇班級"],["student","學生資料"],["family","家長與人數"],["events","比賽項目"],["tshirt","加購T恤"],["payment","匯款回報"],["confirm","確認送出"]];
 let cur=0;
 const active=()=>STEPS.filter(([id])=>S.attend==="不參加"?!["family","events","tshirt","payment"].includes(id):true);
 function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove("show"),1900)}
@@ -731,7 +836,7 @@ function render(){
   $("#stepName").textContent=act[cur][1]; $("#stepOf").textContent=`STEP ${cur+1} / ${act.length}`;
   $("#backBtn").hidden=cur===0;
   $("#nextTxt").textContent=id==="confirm"?"送出報名":"下一步";
-  if(id==="payment"){const t=teeTotal();$("#paySub").textContent=`請將應繳總額匯至 ${S.cls} 班帳號 ${C.CLASSES[S.cls].account}，再填寫以下資訊。`;
+  if(id==="payment"){const t=teeTotal();$("#paySub").textContent=`請將應繳總額匯至 ${S.cls} 班帳號 ${C.CLASSES[S.cls].bank} ${C.CLASSES[S.cls].account}，或使用 LINE Pay 付款，完成後填寫以下資訊。`;$("#lpNote").textContent=`💚 LINE Pay 付款請聯繫本班總務：${C.CLASSES[S.cls].linepay}。付款後填寫付款日期即可。`;
     $("#paybox").innerHTML=`<div><span>報名費（每戶）</span><span>NT$${C.FEE}</span></div>`+(t.qty?`<div><span>紀念 T 恤 × ${t.qty} 件</span><span>NT$${t.amount}</span></div>`:"")+`<div class="t"><span>應繳總額</span><span>NT$${C.FEE+t.amount}</span></div>`}
   if(id==="confirm") buildReview($("#review"));
 }
@@ -741,13 +846,29 @@ $("#flags").addEventListener("click",e=>{const b=e.target.closest(".pen");if(!b)
   S.cls=b.dataset.c;$("#flags").classList.add("picked");
   document.querySelectorAll(".pen").forEach(x=>x.setAttribute("aria-pressed",x===b));
   const info=C.CLASSES[S.cls],t=$("#ticket");t.style.setProperty("--c",CC[S.cls]);
-  $("#tkCls").textContent=S.cls;$("#tkAcct").textContent=info.account;$("#tkMeta").textContent=`${info.bank}　戶名：${info.holder}`;$("#tkFee").textContent=`NT$${C.FEE}`;
+  $("#tkCls").textContent=S.cls;$("#tkAcct").textContent=info.account;$("#tkMeta").textContent=`銀行代碼 ${info.bank}`;$("#tkLine").textContent=info.linepay;$("#tkFee").textContent=`NT$${C.FEE}`;
   t.classList.remove("show");void t.offsetWidth;t.classList.add("show");clearErr("f-class")});
 $("#copyBtn").addEventListener("click",async()=>{const acct=C.CLASSES[S.cls].account.replace(/[^\d]/g,"");
   try{await navigator.clipboard.writeText(acct);toast("已複製帳號 ✅")}catch{const r=document.createRange();r.selectNodeContents($("#tkAcct"));const s=getSelection();s.removeAllRanges();s.addRange(r);toast("請長按複製帳號")}});
 /* attend */
 document.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{S.attend=b.dataset.v;
   document.querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-pressed",x===b));clearErr("f-attend");render()}));
+/* family relay */
+function famRender(){const F=S.fam;document.querySelectorAll("#famsel .chip").forEach(c=>c.setAttribute("aria-pressed",!!F[c.dataset.f]));$("#sibN").textContent=F.sib}
+$("#events").addEventListener("click",e=>{const b=e.target.closest("#famsel button");if(!b)return;const F=S.fam,k=b.dataset.f;
+  if(k==="none"){F.none=!F.none;if(F.none){F.dad=F.mom=false;F.sib=0}}
+  else if(k==="sib"){F.sib=Math.min(6,Math.max(0,F.sib+Number(b.dataset.d)));if(F.sib)F.none=false}
+  else{F[k]=!F[k];if(F[k])F.none=false}
+  famRender();if(famOk())$("#famsel").closest(".ev").classList.remove("miss");clearErr("f-events")});
+$("#events").addEventListener("click",e=>{const b=e.target.closest("#dadsel button");if(!b)return;S.dadtug=b.dataset.y;
+  document.querySelectorAll("#dadsel .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));$("#dadsel").closest(".ev").classList.remove("miss");clearErr("f-events")});
+const famOk=()=>S.fam.none||S.fam.dad||S.fam.mom||S.fam.sib>0;
+const famText=()=>S.fam.none?"不參加":[S.fam.dad&&"爸爸",S.fam.mom&&"媽媽",S.fam.sib&&`兄弟姊妹 ${S.fam.sib} 人`].filter(Boolean).join("、");
+/* pay method */
+document.querySelectorAll(".opt.pw").forEach(b=>b.addEventListener("click",()=>{S.pay=b.dataset.v;
+  document.querySelectorAll(".opt.pw").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  const lp=S.pay==="LINE Pay";$("#f-last5").style.display=lp?"none":"";$("#lpNote").style.display=lp?"block":"none";
+  $("label[for=payDate]").firstChild.textContent=lp?"付款日期 ":"匯款日期 ";clearErr("f-last5")}));
 /* counters */
 document.querySelectorAll(".cnt").forEach(c=>c.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
   const k=c.dataset.for,min=k==="kids"?1:0;S[k]=Math.min(10,Math.max(min,S[k]+Number(b.dataset.d)));$("#"+k).textContent=S[k]}));
@@ -773,10 +894,10 @@ function toggleEvent(card){const id=card.dataset.e;
   if(S.events[id]){delete S.events[id];card.classList.remove("on");card.setAttribute("aria-checked","false");card.querySelectorAll("button.chip").forEach(p=>p.setAttribute("aria-pressed","false"))}
   else{const dw=(EVENTS.find(x=>x.id===id)||{}).def||"學生本人";S.events[id]=new Set([dw]);card.classList.add("on");card.setAttribute("aria-checked","true");card.querySelector(`.chip[data-w="${dw}"]`)?.setAttribute("aria-pressed","true")}
   clearErr("f-events")}
-$("#events").addEventListener("click",e=>{const card=e.target.closest(".ev");if(!card)return;if(card.classList.contains("auto"))return;const chip=e.target.closest("button.chip");if(!chip&&e.target.closest(".whos"))return;
+$("#events").addEventListener("click",e=>{const card=e.target.closest(".ev");if(!card)return;if(card.classList.contains("auto")||card.classList.contains("fam"))return;const chip=e.target.closest("button.chip");if(!chip&&e.target.closest(".whos"))return;
   if(chip){const set=S.events[card.dataset.e],w=chip.dataset.w;set.has(w)?set.delete(w):set.add(w);chip.setAttribute("aria-pressed",set.has(w));clearErr("f-events");return}
   toggleEvent(card)});
-$("#events").addEventListener("keydown",e=>{if((e.key===" "||e.key==="Enter")&&e.target.classList.contains("ev")){e.preventDefault();toggleEvent(e.target)}});
+$("#events").addEventListener("keydown",e=>{if((e.key===" "||e.key==="Enter")&&e.target.classList.contains("ev")&&!e.target.classList.contains("fam")&&!e.target.classList.contains("auto")){e.preventDefault();toggleEvent(e.target)}});
 $("#last5").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"").slice(0,5)});
 document.querySelectorAll("input,textarea").forEach(i=>i.addEventListener("input",()=>{const f=i.closest("[id^=f-]");if(f)clearErr(f.id)}));
 $("#agree").addEventListener("change",()=>clearErr("f-agree"));
@@ -788,21 +909,20 @@ const CHECKS={
   student:()=>[["f-seat",/^\d+$/.test(val("seat"))&&+val("seat")>=1&&+val("seat")<=50],["f-nameZh",!!val("nameZh")],["f-nameEn",!!val("nameEn")],["f-attend",!!S.attend]],
   family:()=>[["f-parent",!!val("parent")],["f-phone",/^0\d{8,9}$/.test(val("phone").replace(/[\s-]/g,""))]],
   tshirt:()=>[],
-  events:()=>[["f-events",Object.values(S.events).every(s=>s.size>0)]],
-  payment:()=>[["f-last5",/^\d{5}$/.test(val("last5"))],["f-payDate",!!val("payDate")]],
+  events:()=>{const a=famOk(),b=!!S.dadtug;$("#famsel")?.closest(".ev").classList.toggle("miss",!a);$("#dadsel")?.closest(".ev").classList.toggle("miss",!b);return [["f-events",a&&b]]},
+  payment:()=>[["f-last5",S.pay==="LINE Pay"||/^\d{5}$/.test(val("last5"))],["f-payDate",!!val("payDate")]],
   confirm:()=>[["f-agree",$("#agree").checked]]};
 
 function data(){const going=S.attend==="參加",info=C.CLASSES[S.cls],ev=id=>S.events[id]?[...S.events[id]].join("、"):"";
-  const rs=S.events.relay?[...S.events.relay]:[],relayStudent=rs.includes("G2學生組")?"參加":"",relayFamily=FAM.filter(w=>rs.includes(w)).join("、");
-  const relayText=[relayStudent&&"G2學生組",relayFamily&&`家長／兄弟姊妹組：${relayFamily}`].filter(Boolean).join("；");
+  const relayFamily=famText(), relayText=`G2學生組（全員參加）；家屬組：${relayFamily}`;
   return {class:S.cls,seat:+val("seat"),nameZh:val("nameZh"),nameEn:val("nameEn"),attend:S.attend,
     parent:going?val("parent"):"",phone:going?val("phone"):"",adults:going?S.adults:0,kids:going?S.kids:0,
-    relay:going?relayText:"",relayStudent:going?relayStudent:"",relayFamily:going?relayFamily:"",hula:going?"學生本人（全員參加）":"",dragon:going?"學生本人（全員參加）":"",
-    fee:going?C.FEE:0,...Object.fromEntries(T.SIZES.map(([z])=>["ts_"+z,going?S.tee[z]:0])),tshirt:going?teeTotal().text:"",tshirtQty:going?teeTotal().qty:0,tshirtAmount:going?teeTotal().amount:0,total:going?C.FEE+teeTotal().amount:0,bank:going?info.bank:"",account:going?info.account:"",last5:going?val("last5"):"",payDate:going?val("payDate"):"",note:val("note")}}
+    relay:going?relayText:"",relayStudent:going?"參加":"",relayFamily:going?relayFamily:"",famDad:going&&S.fam.dad?1:0,famMom:going&&S.fam.mom?1:0,famSib:going?S.fam.sib:0,famrelay:going?relayFamily:"",tug:going?"學生本人（全員參加）":"",dribble:going?"學生本人（全員參加）":"",dadtug:going?S.dadtug:"",hula:going?"學生本人（全員參加）":"",dragon:going?"學生本人（全員參加）":"",
+    fee:going?C.FEE:0,...Object.fromEntries(T.SIZES.map(([z])=>["ts_"+z,going?S.tee[z]:0])),tshirt:going?teeTotal().text:"",tshirtQty:going?teeTotal().qty:0,tshirtAmount:going?teeTotal().amount:0,total:going?C.FEE+teeTotal().amount:0,bank:going?info.bank:"",account:going?info.account:"",last5:going?(S.pay==="LINE Pay"?"LINE Pay":val("last5")):"",payDate:going?val("payDate"):"",note:val("note")}}
 function rows(d){const r=[["班級 / 座號",`${d.class} 班 ${d.seat} 號`],["學生",`${d.nameZh}（${d.nameEn}）`],["是否參加",d.attend]];
   if(d.attend==="參加"){r.push(["家長 / 電話",`${d.parent} / ${d.phone}`],["出席人數",`大人 ${d.adults}・孩童 ${d.kids}`]);
-    EVENTS.forEach(e=>d[e.id]&&r.push([e.name,d[e.id]]));
-    r.push(["紀念 T 恤",d.tshirtQty?`${d.tshirt}（${d.tshirtQty} 件 NT$${d.tshirtAmount}）`:"未加購"],["應繳總額",`NT$${d.total}`],["匯款帳號",`${d.bank} ${d.account}`],["末五碼 / 日期",`${d.last5} / ${d.payDate}`])}
+    EVENTS.forEach(e=>d[e.id]&&r.push([e.name,e.id==="relay"?"學生本人（全員參加）":d[e.id]]));
+    r.push(["紀念 T 恤",d.tshirtQty?`${d.tshirt}（${d.tshirtQty} 件 NT$${d.tshirtAmount}）`:"未加購"],["應繳總額",`NT$${d.total}`],["匯款帳號",`${d.bank} ${d.account}`],[d.last5==="LINE Pay"?"付款方式 / 日期":"末五碼 / 日期",`${d.last5} / ${d.payDate}`])}
   return r}
 function buildReview(el,d=data()){const r=rows(d);el.innerHTML=r.map(()=>`<div><span></span><span></span></div>`).join("");
   [...el.children].forEach((x,i)=>{x.firstElementChild.textContent=r[i][0];x.lastElementChild.textContent=r[i][1]})}
