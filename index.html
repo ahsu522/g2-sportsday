@@ -928,6 +928,22 @@ function buildReview(el,d=data()){const r=rows(d);el.innerHTML=r.map(()=>`<div><
   [...el.children].forEach((x,i)=>{x.firstElementChild.textContent=r[i][0];x.lastElementChild.textContent=r[i][1]})}
 
 $("#backBtn").addEventListener("click",()=>{if(cur>0){cur--;render();$("#wiz").scrollIntoView({behavior:"smooth",block:"start"})}});
+
+/* 送出到 Google Sheet：一般方式失敗時（常見於手機 LINE／Facebook 內建瀏覽器、Safari 擋跨網域轉址），
+   自動改用 no-cors 再送一次。後台以「班級＋座號」覆蓋同一筆，重送不會重複。 */
+async function sendToSheet(d){
+  const body=JSON.stringify(d), withTimeout=(p,ms)=>Promise.race([p,new Promise((_,j)=>setTimeout(()=>j(new Error("timeout")),ms))]);
+  try{
+    const r=await withTimeout(fetch(C.SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body,redirect:"follow"}),20000);
+    const t=await r.text(); let j; try{j=JSON.parse(t)}catch{j=null}
+    if(j){ if(!j.ok) throw Object.assign(new Error(j.error||"送出失敗"),{server:true}); return j; }
+    throw new Error("bad response");
+  }catch(e){
+    if(e.server) throw e;                       // 後台明確回覆錯誤（例如座號錯誤），不重送
+    await withTimeout(fetch(C.SCRIPT_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body}),20000);
+    return {ok:true,updated:false,blind:true};  // no-cors 無法讀回結果，但資料已送達後台
+  }
+}
 $("#form").addEventListener("submit",async e=>{e.preventDefault();
   const act=active(),id=act[cur][0],bad=CHECKS[id]().filter(x=>!x[1]);
   bad.forEach(x=>setErr(x[0]));
@@ -935,8 +951,7 @@ $("#form").addEventListener("submit",async e=>{e.preventDefault();
   if(id!=="confirm"){cur++;render();$("#wiz").scrollIntoView({behavior:"smooth",block:"start"});return}
   const d=data(),btn=$("#nextBtn");btn.disabled=true;$("#nextTxt").textContent="送出中…";
   try{let res={ok:true,updated:false};
-    if(C.SCRIPT_URL){const r=await fetch(C.SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(d)});
-      res=await r.json();if(!res.ok)throw new Error(res.error||"送出失敗")} else if(window.SAVE_HOOK) res=await window.SAVE_HOOK(d); else await new Promise(r=>setTimeout(r,700));
+    if(C.SCRIPT_URL){res=await sendToSheet(d)} else if(window.SAVE_HOOK) res=await window.SAVE_HOOK(d); else await new Promise(r=>setTimeout(r,700));
     showDone(d,res)}catch(err){toast("送出失敗，請稍後再試 🙇 "+(err.message||""))}
   finally{btn.disabled=false;$("#nextTxt").textContent="送出報名"}});
 
