@@ -39,7 +39,7 @@ const CONFIG = {
     // bank：銀行代碼與名稱；account：帳號；linepay：使用 LINE Pay 請聯絡的總務媽媽（LINE 名稱）
     "201": { bank: "(012) 台北富邦銀行", account: "05927534520000", linepay: "韓佳純" },
     "202": { bank: "(822) 中國信託",     account: "901565320845",   linepay: "沛杰媽媽（Olivia 范）" },
-    "203": { bank: "(810) 星展銀行",     account: "60591922688",    linepay: "大洋媽媽（Flora Chen）" },
+    "203": { bank: "(810) 星展銀行",     account: "60591922688",    linepay: "方棠媽媽（Andi）", role: "班代" },
     "204": { bank: "(822) 中國信託",     account: "015540147515",   linepay: "梓洋媽媽（Grace）" },
     "205": { bank: "(822) 中國信託",     account: "510540397569",   linepay: "Yingmi" },
     "206": { bank: "(824) 連線商業銀行 LINE Bank", account: "116000112131", linepay: "張貝貝（翊芯媽媽）" },
@@ -362,7 +362,7 @@ footer .stripe{height:10px;max-width:220px;margin:0 auto 10px;border-radius:999p
           <div class="top"><span><span id="tkCls"></span> 班專屬匯款帳號</span><span class="fd">BANK TRANSFER</span></div>
           <div class="body">
             <div><div class="acct" id="tkAcct"></div><div class="meta" id="tkMeta"></div><button type="button" class="btn-copy" id="copyBtn">📋 複製帳號</button>
-              <div class="linepay">💚 <b>LINE Pay</b> 付款請聯繫本班總務：<b id="tkLine"></b></div></div>
+              <div class="linepay">💚 <b>LINE Pay</b> 付款請聯繫本班<span id="tkRole">總務</span>：<b id="tkLine"></b></div></div>
             <div class="fee"><small>每戶費用</small><b id="tkFee"></b></div>
           </div>
         </div>
@@ -484,7 +484,7 @@ footer .stripe{height:10px;max-width:220px;margin:0 auto 10px;border-radius:999p
   </div>
   <p class="demo" id="demoNote"></p>
 
-  <footer><div class="stripe"></div>KCIS Linkou · Grade 2 Family Fun Day<br><small style="opacity:.6">版本 1006g</small></footer>
+  <footer><div class="stripe"></div>KCIS Linkou · Grade 2 Family Fun Day<br><small style="opacity:.6">版本 1006i</small></footer>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -839,7 +839,7 @@ function render(){
   $("#stepName").textContent=act[cur][1]; $("#stepOf").textContent=`STEP ${cur+1} / ${act.length}`;
   $("#backBtn").hidden=cur===0;
   $("#nextTxt").textContent=id==="confirm"?"送出報名":"下一步";
-  if(id==="payment"){const t=teeTotal();$("#paySub").textContent=`請將應繳總額匯至 ${S.cls} 班帳號 ${C.CLASSES[S.cls].bank} ${C.CLASSES[S.cls].account}，或使用 LINE Pay 付款，完成後填寫以下資訊。`;$("#lpNote").textContent=`💚 LINE Pay 付款請聯繫本班總務：${C.CLASSES[S.cls].linepay}。付款後填寫付款日期即可。`;
+  if(id==="payment"){const t=teeTotal();$("#paySub").textContent=`請將應繳總額匯至 ${S.cls} 班帳號 ${C.CLASSES[S.cls].bank} ${C.CLASSES[S.cls].account}，或使用 LINE Pay 付款，完成後填寫以下資訊。`;$("#lpNote").textContent=`💚 LINE Pay 付款請聯繫本班${C.CLASSES[S.cls].role||"總務"}：${C.CLASSES[S.cls].linepay}。付款後填寫付款日期即可。`;
     $("#paybox").innerHTML=`<div><span>報名費（每戶）</span><span>NT$${C.FEE}</span></div>`+(t.qty?`<div><span>紀念 T 恤 × ${t.qty} 件</span><span>NT$${t.amount}</span></div>`:"")+`<div class="t"><span>應繳總額</span><span>NT$${C.FEE+t.amount}</span></div>`}
   if(id==="confirm") buildReview($("#review"));
 }
@@ -849,7 +849,7 @@ $("#flags").addEventListener("click",e=>{const b=e.target.closest(".pen");if(!b)
   S.cls=b.dataset.c;$("#flags").classList.add("picked");
   document.querySelectorAll(".pen").forEach(x=>x.setAttribute("aria-pressed",x===b));
   const info=C.CLASSES[S.cls],t=$("#ticket");t.style.setProperty("--c",CC[S.cls]);
-  $("#tkCls").textContent=S.cls;$("#tkAcct").textContent=info.account;$("#tkMeta").textContent=`銀行代碼 ${info.bank}`;$("#tkLine").textContent=info.linepay;$("#tkFee").textContent=`NT$${C.FEE}`;
+  $("#tkCls").textContent=S.cls;$("#tkAcct").textContent=info.account;$("#tkMeta").textContent=`銀行代碼 ${info.bank}`;$("#tkLine").textContent=info.linepay;$("#tkRole").textContent=info.role||"總務";$("#tkFee").textContent=`NT$${C.FEE}`;
   t.classList.remove("show");void t.offsetWidth;t.classList.add("show");clearErr("f-class")});
 $("#copyBtn").addEventListener("click",async()=>{const acct=C.CLASSES[S.cls].account.replace(/[^\d]/g,"");
   try{await navigator.clipboard.writeText(acct);toast("已複製帳號 ✅")}catch{const r=document.createRange();r.selectNodeContents($("#tkAcct"));const s=getSelection();s.removeAllRanges();s.addRange(r);toast("請長按複製帳號")}});
